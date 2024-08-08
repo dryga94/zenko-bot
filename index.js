@@ -17,21 +17,6 @@ const port = process.env.PORT || 3000;
 
 const bot = new TelegramBot(token, { polling: true });
 
-function shutDown() {
-  console.log("Shutting down...");
-  bot.stopPolling();
-  server.close(() => {
-    console.log("Server closed");
-    process.exit(0);
-  });
-}
-
-// Capture SIGINT for ctrl+c
-process.on("SIGINT", shutDown);
-
-// Capture SIGTERM for docker or other systems
-process.on("SIGTERM", shutDown);
-
 // START
 bot.onText(/\/start (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;

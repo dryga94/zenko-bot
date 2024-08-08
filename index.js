@@ -190,7 +190,7 @@ app.post("/send-notification", async (req, res) => {
           [
             {
               text: "Читати на сайті",
-              url: webAppUrl,
+              url: linkToOpen,
             },
           ],
         ],

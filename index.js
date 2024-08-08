@@ -152,10 +152,12 @@ bot.on("callback_query", async (query) => {
                 web_app: { url: `${webAppUrl}user?activeTab=SETTINGS` },
               },
             ],
-            {
-              text: `Відкрити профіль на сайті`,
-              url: `${webAppUrl}user?activeTab=SETTINGS`,
-            },
+            [
+              {
+                text: `Відкрити профіль на сайті`,
+                url: `${webAppUrl}user?activeTab=SETTINGS`,
+              },
+            ],
           ],
         },
       }

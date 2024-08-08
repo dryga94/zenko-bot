@@ -75,14 +75,18 @@ bot.onText(/\/start$/, async (msg) => {
       reply_markup: {
         inline_keyboard: [
           [
-            {
-              text: `Перейти до сайту`,
-              web_app: { url: `${webAppUrl}` },
-            },
-            {
-              text: `Отримувати сповіщення про нові розділи`,
-              callback_data: "show_pre_token",
-            },
+            [
+              {
+                text: `Перейти до сайту`,
+                web_app: { url: `${webAppUrl}` },
+              },
+            ],
+            [
+              {
+                text: `Отримувати сповіщення про нові розділи`,
+                callback_data: "show_pre_token",
+              },
+            ],
           ],
         ],
       },
@@ -189,10 +193,18 @@ app.post("/send-notification", async (req, res) => {
       reply_markup: {
         inline_keyboard: [
           [
-            {
-              text: "Читати розділ",
-              web_app: { url: linkToOpen },
-            },
+            [
+              {
+                text: "Читати в телеґрамі",
+                web_app: { url: linkToOpen },
+              },
+            ],
+            [
+              {
+                text: "Читати на сайті",
+                url: webAppUrl,
+              },
+            ],
           ],
         ],
       },

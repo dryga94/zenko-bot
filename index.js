@@ -1,5 +1,6 @@
 require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
+const decodeChapterName = require("./decode-chapter-name");
 const express = require("express");
 const app = express();
 
@@ -166,7 +167,9 @@ bot.on("callback_query", async (query) => {
 });
 
 app.post("/send-notification", async (req, res) => {
-  const { chatId, coverImg, name, titleId, chapterId } = req.body;
+  const { chatId, coverImg, name, titleId, chapterId, chapterName } = req.body;
+
+  const chapterNameDecoded = decodeChapterName(chapterName);
 
   if (!chatId || !coverImg || !name || !titleId || !chapterId) {
     return res.status(400).json({ error: "Missing required parameters" });
@@ -178,7 +181,7 @@ app.post("/send-notification", async (req, res) => {
 
   try {
     await bot.sendPhoto(chatId, preview, {
-      caption: `Новий розділ "${name}" вже доступний!`,
+      caption: `${chapterNameDecoded} до тайтлу "${name}" вже доступний для читання!`,
       reply_markup: {
         inline_keyboard: [
           [

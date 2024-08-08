@@ -1,8 +1,13 @@
 const TelegramBot = require("node-telegram-bot-api");
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
 
-const token = "7497564513:AAGsCBU9FqyEt7V2wmKFIAwctLqva99jaSE";
-const webAppUrl = "https://zenko.online/";
-const API_URL = "https://zenko-api.onrender.com/";
+app.use(express.json());
+
+const token = process.env.TG_TOKEN;
+const webAppUrl = process.env.WEB_APP_URL;
+const API_URL = process.env.API_URL;
 
 // COMMANDS
 // /start - Відкрити сайт
@@ -10,7 +15,6 @@ const API_URL = "https://zenko-api.onrender.com/";
 // /clear - Очистити чат
 
 const bot = new TelegramBot(token, { polling: true });
-
 
 // START
 bot.onText(/\/start (.+)/, async (msg, match) => {
@@ -41,7 +45,6 @@ bot.onText(/\/start (.+)/, async (msg, match) => {
       },
     });
   } else {
-    // Handle other parameters or default start message
     bot.sendMessage(chatId, "Welcome! Use /webapp to launch the web app.");
   }
 });
@@ -110,7 +113,6 @@ bot.onText(/\/clear/, (msg) => {
   clearChat(chatId, messageId);
 });
 
-
 // CALLBACKS
 
 bot.on("callback_query", async (query) => {
@@ -152,4 +154,8 @@ bot.on("callback_query", async (query) => {
       }
     );
   }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

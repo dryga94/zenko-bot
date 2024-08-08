@@ -148,10 +148,14 @@ bot.on("callback_query", async (query) => {
           inline_keyboard: [
             [
               {
-                text: `Перейти до профілю`,
+                text: `Відкрити профіль у телеґрам`,
                 web_app: { url: `${webAppUrl}user?activeTab=SETTINGS` },
               },
             ],
+            {
+              text: `Відкрити профіль на сайті`,
+              url: `${webAppUrl}user?activeTab=SETTINGS`,
+            },
           ],
         },
       }

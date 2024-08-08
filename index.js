@@ -2,13 +2,13 @@ require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const token = process.env.TG_TOKEN;
 const webAppUrl = process.env.WEB_APP_URL || "https://zenko.online/";
+const port = process.env.PORT || 3000;
 
 // COMMANDS
 // /start - Відкрити сайт

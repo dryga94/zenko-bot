@@ -1,13 +1,14 @@
+require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const token = process.env.TG_TOKEN;
-const webAppUrl = process.env.WEB_APP_URL;
-const API_URL = process.env.API_URL;
+const webAppUrl = process.env.WEB_APP_URL || "https://zenko.online/";
 
 // COMMANDS
 // /start - Відкрити сайт
@@ -89,7 +90,7 @@ bot.onText(/\/start$/, async (msg) => {
   );
 });
 
-// TOKEN
+// // TOKEN
 bot.onText(/\/token/, async (msg) => {
   const chatId = msg.chat.id;
 
@@ -111,7 +112,7 @@ bot.onText(/\/token/, async (msg) => {
   );
 });
 
-// CLEAR
+// // CLEAR
 bot.onText(/\/clear/, (msg) => {
   const chatId = msg.chat.id;
   const messageId = msg.message_id;
@@ -128,7 +129,7 @@ bot.onText(/\/clear/, (msg) => {
   clearChat(chatId, messageId);
 });
 
-// CALLBACKS
+// // CALLBACKS
 
 bot.on("callback_query", async (query) => {
   if (query.data === "show_pre_token") {
@@ -171,24 +172,25 @@ bot.on("callback_query", async (query) => {
   }
 });
 
-app.get("/send-notification", async (req, res) => {
-  const { chatId, coverImg, name, titleId, chapterId } = req.query;
-  console.log("here am i", req.query);
+app.post("/send-notification", async (req, res) => {
+  const { chatId, coverImg, name, titleId, chapterId } = req.body;
 
   if (!chatId || !coverImg || !name || !titleId || !chapterId) {
     return res.status(400).json({ error: "Missing required parameters" });
   }
 
   const preview = `https://zenko.b-cdn.net/${coverImg}?optimizer=image&width=360&quality=80`;
-  const linkToOpen = `${webAppUrl}/title/${titleId}/chapter/${chapterId}`;
+  const linkToOpen = `${webAppUrl}titles/${titleId}/${chapterId}`;
+  console.log("linkToOpen", linkToOpen);
 
   try {
     await bot.sendPhoto(chatId, preview, {
+      caption: `Новий розділ "${name}" вже доступний!`,
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: `До тайтлу ${name}`,
+              text: "Читати розділ",
               web_app: { url: linkToOpen },
             },
           ],

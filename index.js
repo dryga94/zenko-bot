@@ -156,6 +156,37 @@ bot.on("callback_query", async (query) => {
   }
 });
 
+app.get("/send-notification", async (req, res) => {
+  const { chatId, coverImg, name, titleId, chapterId } = req.query;
+  console.log('here am i', req.query);
+
+  if (!chatId || !coverImg || !name || !titleId || !chapterId) {
+    return res.status(400).json({ error: "Missing required parameters" });
+  }
+
+  const preview = `https://zenko.b-cdn.net/${coverImg}?optimizer=image&width=360&quality=80`;
+  const linkToOpen = `${webAppUrl}/title/${titleId}/chapter/${chapterId}`;
+
+  try {
+    await bot.sendPhoto(chatId, preview, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: `До тайтлу ${name}`,
+              web_app: { url: linkToOpen },
+            },
+          ],
+        ],
+      },
+    });
+    res.status(200).json({ message: "Notification sent successfully" });
+  } catch (error) {
+    console.error("Error sending notification:", error);
+    res.status(500).json({ error: "Failed to send notification" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
